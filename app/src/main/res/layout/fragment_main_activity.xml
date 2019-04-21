@@ -14,6 +14,7 @@
         android:id="@+id/questionNumberTextView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/spacing"
         android:layout_marginBottom="@dimen/spacing"
         android:gravity="center_horizontal"
         android:text="@string/question" />
@@ -54,7 +55,7 @@
             android:layout_weight="1"
             android:lines="2"
             android:text="Button"
-            android:textColor="@color/button_text_color" />
+            android:textColor="@color/button_text_color" tools:targetApi="m"/>
 
         <Button
             android:id="@+id/button3"
@@ -64,7 +65,8 @@
             android:layout_weight="1"
             android:lines="2"
             android:text="Button"
-            android:textColor="@color/button_text_color" />
+            android:textColor="@color/button_text_color"
+            tools:targetApi="m"/>
     </LinearLayout>
 
     <LinearLayout
@@ -81,7 +83,7 @@
             android:layout_weight="1"
             android:lines="2"
             android:text="Button"
-            android:textColor="@color/button_text_color" />
+            android:textColor="@color/button_text_color" tools:targetApi="m"/>
 
         <Button
             android:id="@+id/button5"
@@ -91,7 +93,7 @@
             android:layout_weight="1"
             android:lines="2"
             android:text="Button"
-            android:textColor="@color/button_text_color" />
+            android:textColor="@color/button_text_color" tools:targetApi="m"/>
     </LinearLayout>
 
     <LinearLayout
@@ -108,7 +110,7 @@
             android:layout_weight="1"
             android:lines="2"
             android:text="Button"
-            android:textColor="@color/button_text_color" />
+            android:textColor="@color/button_text_color" tools:targetApi="m"/>
 
         <Button
             android:id="@+id/button7"
@@ -118,7 +120,7 @@
             android:layout_weight="1"
             android:lines="2"
             android:text="Button"
-            android:textColor="@color/button_text_color" />
+            android:textColor="@color/button_text_color" tools:targetApi="m"/>
     </LinearLayout>
 
     <LinearLayout
@@ -135,7 +137,7 @@
             android:layout_weight="1"
             android:lines="2"
             android:text="Button"
-            android:textColor="@color/button_text_color" />
+            android:textColor="@color/button_text_color" tools:targetApi="m"/>
 
         <Button
             android:id="@+id/button9"
@@ -145,7 +147,7 @@
             android:layout_weight="1"
             android:lines="2"
             android:text="Button"
-            android:textColor="@color/button_text_color" />
+            android:textColor="@color/button_text_color" tools:targetApi="m"/>
     </LinearLayout>
 
     <TextView
