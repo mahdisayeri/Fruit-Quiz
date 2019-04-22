@@ -49,9 +49,9 @@ public class MainActivity extends AppCompatActivity {
         super.onStart();
         if(preferencesChenged){
             MainActivityFragment quizFragment= (MainActivityFragment) getSupportFragmentManager().findFragmentById(R.id.quizFragment);
-//            quizFragment.updateGuessRows(PreferenceManager.getDefaultSharedPreferences(this));
-//            quizFragment.updateRegions(PreferenceManager.getDefaultSharedPreferences(this));
-//            quizFragment.resetQuiz();
+            quizFragment.updateGuessRows(PreferenceManager.getDefaultSharedPreferences(this));
+            quizFragment.updateRegions(PreferenceManager.getDefaultSharedPreferences(this));
+            quizFragment.resetQuiz();
             preferencesChenged =false;
         }
     }
@@ -63,13 +63,13 @@ public class MainActivity extends AppCompatActivity {
             preferencesChenged=true;
             MainActivityFragment quizFragment= (MainActivityFragment) getSupportFragmentManager().findFragmentById(R.id.quizFragment);
             if(key.equals(CHOICES)){
-//                quizFragment.updateGuessRows(sharedPreferences);
-//                quizFragment.resetQuiz();
+               quizFragment.updateGuessRows(sharedPreferences);
+               quizFragment.resetQuiz();
             }else if(key.equals(REGIONS)){
                 Set<String> regions=sharedPreferences.getStringSet(REGIONS,null);
                 if(regions!=null && regions.size()>0){
-//                    quizFragment.updateRegions(sharedPreferences);
-//                    quizFragment.resetQuiz();
+                  quizFragment.updateRegions(sharedPreferences);
+                    quizFragment.resetQuiz();
                 }else{
                     regions.add(getString(R.string.default_region));
                     SharedPreferences.Editor editor=sharedPreferences.edit();
