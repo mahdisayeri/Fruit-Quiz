@@ -3,6 +3,8 @@ package ir.tokaterm.fruitequiz;
 
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.SharedPreferences;
 import android.content.res.AssetManager;
 import android.graphics.drawable.Drawable;
@@ -10,6 +12,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.v4.app.Fragment;
+import android.support.v4.content.ContextCompat;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -95,8 +98,59 @@ public class MainActivityFragment extends Fragment {
         @Override
         public void onClick(View v) {
 
+            Button guessButton=(Button)v;
+            String guess= guessButton.getText().toString();
+            String answer=getCountryName(correctAnswer);
+            ++totalGuesses;
+            if(guess.equals(answer)){
+                ++correctAnswers;
+                answerTextView.setText(answer+"!");
+                answerTextView.setTextColor(ContextCompat.getColor(getActivity(),R.color.correct_answer));
+                disableButtons();
+                if(correctAnswers==flagsInQuiz){
+
+                    AlertDialog.Builder builder=new AlertDialog.Builder(getContext());
+                    builder.setMessage(getString(R.string.results,totalGuesses,(1000.0/totalGuesses)));
+                    builder.setPositiveButton(R.string.reset_quiz, new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            resetQuiz();
+                        }
+                    });
+                    builder.setCancelable(false);
+                    builder.create().show();
+                }
+                else {
+                    handler.postDelayed(new Runnable() {
+                        @Override
+                        public void run() {
+                            animate(true);
+                        }
+                    },2000);
+                }
+            }
+
+            else {
+                flagImageView.setAnimation(shakeAnimation);
+                answerTextView.setText(R.string.incorrect_answer);
+                answerTextView.setTextColor(ContextCompat.getColor(getContext(),R.color.incorrect_answer));
+                guessButton.setEnabled(false);
+            }
+
         }
     };
+
+private void disableButtons(){
+
+    for (int row=0;row<guessRows;row++){
+
+        LinearLayout guessRows=guessesLinearLayouts[row];
+        for(int column=0;column<guessRows.getChildCount();column++) {
+            guessRows.getChildAt(column).setEnabled(false);
+        }
+        }
+
+}
 
 
     public void resetQuiz(){
@@ -164,6 +218,14 @@ public class MainActivityFragment extends Fragment {
                 newGuessButton.setText(getCountryName(fileName));
             }
         }
+        int row=random.nextInt(guessRows);
+        int column=random.nextInt(2);
+        LinearLayout randomRow=guessesLinearLayouts[row];
+        String countryName=getCountryName(correctAnswer);
+        ((Button)randomRow.getChildAt(column)).setText(countryName);
+
+
+
     }
 
     private String getCountryName(String name){
