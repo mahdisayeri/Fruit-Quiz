@@ -2,20 +2,20 @@
 <resources>
 
     <string-array name="regions_list" >
-        <item>Fruits</item>
         <item>Asia</item>
         <item>Europe</item>
+        <item>Fruits</item>
         <item>North_America</item>
-        <item>Oceania</item>
+        <item>Livestock</item>
         <item>South_America</item>
     </string-array>
 
     <string-array name="regions_list_for_settings" >
-        <item>Fruits</item>
         <item>Asia</item>
         <item>Europe</item>
+        <item>Fruits</item>
         <item>North America</item>
-        <item>Oceania</item>
+        <item>Livestock</item>
         <item>South America</item>
     </string-array>
 
