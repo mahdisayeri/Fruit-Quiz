@@ -102,45 +102,61 @@ public class MainActivityFragment extends Fragment {
             Button guessButton=(Button)v;
             String guess= guessButton.getText().toString();
             String answer=getCountryName(correctAnswer);
-            ++totalGuesses;
-            if(guess.equals(answer)){
-                ++correctAnswers;
-                answerTextView.setText(answer+"!");
-                answerTextView.setTextColor(ContextCompat.getColor(getActivity(),R.color.correct_answer));
-                disableButtons();
-                if(correctAnswers==flagsInQuiz){
 
-                    AlertDialog.Builder builder=new AlertDialog.Builder(getContext());
-                    builder.setMessage(getString(R.string.results,totalGuesses,(1000.0/totalGuesses)));
-                    builder.setPositiveButton(R.string.reset_quiz, new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialog, int which) {
-                            resetQuiz();
-                        }
-                    });
-                    builder.setCancelable(false);
-                    builder.create().show();
-                }
-                else {
+            if(totalGuesses<flagsInQuiz){
+                totalGuesses++;
+                if(guess.equals(answer)){
+                    ++correctAnswers;
+                    answerTextView.setText(answer+"!");
+                    answerTextView.setTextColor(ContextCompat.getColor(getActivity(),R.color.correct_answer));
+                    disableButtons();
+
                     handler.postDelayed(new Runnable() {
                         @Override
                         public void run() {
                             animate(true);
                         }
-                    },2000);
+                    },1000);
+
                 }
+
+                else {
+
+                    flagImageView.startAnimation(shakeAnimation);
+                    answerTextView.setText(R.string.incorrect_answer);
+                    answerTextView.setTextColor(ContextCompat.getColor(getContext(),R.color.incorrect_answer));
+                    disableButtons();
+                    guessButton.setEnabled(false);
+
+                    handler.postDelayed(new Runnable() {
+                        @Override
+                        public void run() {
+                            animate(true);
+                        }
+                    },1000);
+
+                }
+
+            }else {
+                AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+                builder.setMessage(getString(R.string.results, correctAnswers, (10*correctAnswers)));
+                builder.setPositiveButton(R.string.reset_quiz, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        resetQuiz();
+                    }
+                });
+                builder.setCancelable(false);
+                builder.create().show();
             }
 
-            else {
-
-                flagImageView.setAnimation(shakeAnimation);
-                answerTextView.setText(R.string.incorrect_answer);
-                answerTextView.setTextColor(ContextCompat.getColor(getContext(),R.color.incorrect_answer));
-                guessButton.setEnabled(false);
-            }
 
         }
     };
+
+
+
+
 
 private void disableButtons(){
 
@@ -171,7 +187,7 @@ private void disableButtons(){
       }
 
       correctAnswers=0;
-      totalGuesses=0;
+      totalGuesses=1;
       quizCountriesList.clear();
       int flagCounter=1;
       int numberOfFlags=fileNameList.size();
@@ -192,7 +208,7 @@ private void disableButtons(){
         String nextImage=quizCountriesList.remove(0);
         correctAnswer=nextImage;
         answerTextView.setText("");
-        questionNumberTextView.setText(getString(R.string.question,(correctAnswers+1),flagsInQuiz));
+        questionNumberTextView.setText(getString(R.string.question,(totalGuesses),flagsInQuiz));
         String region=nextImage.substring(0,nextImage.indexOf('-'));
         AssetManager assets=getActivity().getAssets();
         try{
@@ -239,7 +255,7 @@ private void disableButtons(){
 
     private void animate(boolean animateOut){
 
-        if(correctAnswers==0)
+        if(totalGuesses==1)
             return;
         int centerX=(quizLinearLayout.getLeft()+quizLinearLayout.getRight())/2;
         int centerY=(quizLinearLayout.getTop()+quizLinearLayout.getBottom()/2);
