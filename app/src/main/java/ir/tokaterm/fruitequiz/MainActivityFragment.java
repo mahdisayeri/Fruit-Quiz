@@ -132,6 +132,7 @@ public class MainActivityFragment extends Fragment {
             }
 
             else {
+
                 flagImageView.setAnimation(shakeAnimation);
                 answerTextView.setText(R.string.incorrect_answer);
                 answerTextView.setTextColor(ContextCompat.getColor(getContext(),R.color.incorrect_answer));
@@ -174,7 +175,6 @@ private void disableButtons(){
       quizCountriesList.clear();
       int flagCounter=1;
       int numberOfFlags=fileNameList.size();
-        Toast.makeText(getContext(), numberOfFlags+"", Toast.LENGTH_SHORT).show();
         while (flagCounter<=flagsInQuiz){
             int randomIndex=random.nextInt(numberOfFlags);
             String fileName=fileNameList.get(randomIndex);

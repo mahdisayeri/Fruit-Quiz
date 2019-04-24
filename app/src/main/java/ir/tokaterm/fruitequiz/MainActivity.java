@@ -34,6 +34,8 @@ public class MainActivity extends AppCompatActivity {
         PreferenceManager.setDefaultValues(this,R.xml.preferences,false);
         SharedPreferences sharedPreferences=PreferenceManager.getDefaultSharedPreferences(this);
         sharedPreferences.registerOnSharedPreferenceChangeListener(preferencesChengedListener);
+
+
         int screenSize=getResources().getConfiguration().screenLayout & Configuration.SCREENLAYOUT_SIZE_MASK;
         if(screenSize==Configuration.SCREENLAYOUT_SIZE_LARGE || screenSize==Configuration.SCREENLAYOUT_SIZE_XLARGE){
           phoneDivice=false;
