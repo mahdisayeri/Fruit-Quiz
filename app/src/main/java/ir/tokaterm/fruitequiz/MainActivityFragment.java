@@ -8,6 +8,7 @@ import android.content.DialogInterface;
 import android.content.SharedPreferences;
 import android.content.res.AssetManager;
 import android.graphics.drawable.Drawable;
+import android.media.MediaPlayer;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
@@ -57,6 +58,10 @@ public class MainActivityFragment extends Fragment {
     private ImageView flagImageView;
     private LinearLayout[] guessesLinearLayouts;
     private TextView answerTextView;
+   public MediaPlayer correctsound;
+   public MediaPlayer incorrectsound;
+
+
 
     public MainActivityFragment() {
         // Required empty public constructor
@@ -85,6 +90,9 @@ public class MainActivityFragment extends Fragment {
 
         questionNumberTextView.setText(getString(R.string.question,1,flagsInQuiz));
 
+        correctsound=MediaPlayer.create(getContext(),R.raw.correctsound);
+        incorrectsound=MediaPlayer.create(getContext(),R.raw.incorrectsound);
+
 
         for (LinearLayout row:guessesLinearLayouts){
             for(int column=0;column<row.getChildCount();column++){
@@ -106,6 +114,7 @@ public class MainActivityFragment extends Fragment {
             if(totalGuesses<flagsInQuiz){
                 totalGuesses++;
                 if(guess.equals(answer)){
+                    correctsound.start();
                     ++correctAnswers;
                     answerTextView.setText(answer+"!");
                     answerTextView.setTextColor(ContextCompat.getColor(getActivity(),R.color.correct_answer));
@@ -121,7 +130,7 @@ public class MainActivityFragment extends Fragment {
                 }
 
                 else {
-
+                     incorrectsound.start();
                     flagImageView.startAnimation(shakeAnimation);
                     answerTextView.setText(R.string.incorrect_answer);
                     answerTextView.setTextColor(ContextCompat.getColor(getContext(),R.color.incorrect_answer));
