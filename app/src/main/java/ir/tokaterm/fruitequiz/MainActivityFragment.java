@@ -11,6 +11,7 @@ import android.graphics.drawable.Drawable;
 import android.media.MediaPlayer;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.CountDownTimer;
 import android.os.Handler;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
@@ -24,14 +25,13 @@ import android.view.animation.AnimationUtils;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.ProgressBar;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import java.io.IOException;
 import java.io.InputStream;
 import java.security.SecureRandom;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 import java.util.Set;
@@ -58,8 +58,14 @@ public class MainActivityFragment extends Fragment {
     private ImageView flagImageView;
     private LinearLayout[] guessesLinearLayouts;
     private TextView answerTextView;
-   public MediaPlayer correctsound;
-   public MediaPlayer incorrectsound;
+    public MediaPlayer correctsound;
+    public MediaPlayer incorrectsound;
+    private ProgressBar progressBar;
+    private CountDownTimer countDownTimer;
+    private int  iprogress;
+    private Button nextBtn;
+    private int rowAnswer;
+    private int columnAnswer;
 
 
 
@@ -86,12 +92,14 @@ public class MainActivityFragment extends Fragment {
         guessesLinearLayouts[1]=view.findViewById(R.id.row2LinearLayout);
         guessesLinearLayouts[2]=view.findViewById(R.id.row3LinearLayout);
         guessesLinearLayouts[3]=view.findViewById(R.id.row4LinearLayout);
-        answerTextView=view.findViewById(R.id.answerTextView);
 
         questionNumberTextView.setText(getString(R.string.question,1,flagsInQuiz));
 
         correctsound=MediaPlayer.create(getContext(),R.raw.correctsound);
         incorrectsound=MediaPlayer.create(getContext(),R.raw.incorrectsound);
+
+        progressBar=view.findViewById(R.id.progressBarTime);
+        nextBtn=view.findViewById(R.id.nextBtn);
 
 
         for (LinearLayout row:guessesLinearLayouts){
@@ -103,6 +111,13 @@ public class MainActivityFragment extends Fragment {
    return view;
     }
 
+    @Override
+    public void onPause() {
+        super.onPause();
+        countDownTimer.cancel(); 
+
+    }
+
     private View.OnClickListener guessButtonListener=new View.OnClickListener() {
         @Override
         public void onClick(View v) {
@@ -110,39 +125,42 @@ public class MainActivityFragment extends Fragment {
             Button guessButton=(Button)v;
             String guess= guessButton.getText().toString();
             String answer=getCountryName(correctAnswer);
-
+            countDownTimer.cancel();
             if(totalGuesses<flagsInQuiz){
                 totalGuesses++;
                 if(guess.equals(answer)){
                     correctsound.start();
                     ++correctAnswers;
-                    answerTextView.setText(answer+"!");
-                    answerTextView.setTextColor(ContextCompat.getColor(getActivity(),R.color.correct_answer));
                     disableButtons();
+                    guessButton.setBackground(ContextCompat.getDrawable(getActivity(),R.drawable.correctbuttonstyle));
 
                     handler.postDelayed(new Runnable() {
                         @Override
                         public void run() {
                             animate(true);
+                            guessButton.setBackground(ContextCompat.getDrawable(getActivity(),R.drawable.defaultbuttonstyle));
                         }
-                    },1000);
+                    },2000);
+
 
                 }
 
                 else {
                      incorrectsound.start();
                     flagImageView.startAnimation(shakeAnimation);
-                    answerTextView.setText(R.string.incorrect_answer);
-                    answerTextView.setTextColor(ContextCompat.getColor(getContext(),R.color.incorrect_answer));
                     disableButtons();
-                    guessButton.setEnabled(false);
+                    findBtn(true);
+                    guessButton.setBackground(ContextCompat.getDrawable(getActivity(),R.drawable.incorrectbuttonstyle));
 
                     handler.postDelayed(new Runnable() {
                         @Override
                         public void run() {
                             animate(true);
+                            findBtn(false);
+                            guessButton.setBackground(ContextCompat.getDrawable(getActivity(),R.drawable.defaultbuttonstyle));
                         }
-                    },1000);
+                    },2000);
+
 
                 }
 
@@ -209,14 +227,13 @@ private void disableButtons(){
                 ++flagCounter;
             }
         }
-      loadNextFlag();
+       loadNextFlag();
     }
 
     private void loadNextFlag(){
-
+        nextBtn.setVisibility(View.GONE);
         String nextImage=quizCountriesList.remove(0);
         correctAnswer=nextImage;
-        answerTextView.setText("");
         questionNumberTextView.setText(getString(R.string.question,(totalGuesses),flagsInQuiz));
         String region=nextImage.substring(0,nextImage.indexOf('-'));
         AssetManager assets=getActivity().getAssets();
@@ -246,11 +263,13 @@ private void disableButtons(){
             }
         }
         int row=random.nextInt(guessRows);
+        rowAnswer=row;
         int column=random.nextInt(2);
+        columnAnswer=column;
         LinearLayout randomRow=guessesLinearLayouts[row];
         String countryName=getCountryName(correctAnswer);
         ((Button)randomRow.getChildAt(column)).setText(countryName);
-
+       progressTimer();
 
 
     }
@@ -313,6 +332,51 @@ private void disableButtons(){
     public void updateRegions(SharedPreferences sharedPreferences){
 
      regionSet=sharedPreferences.getStringSet(MainActivity.REGIONS,null);
+    }
+
+    public void progressTimer(){
+
+    iprogress=1;
+    progressBar.setProgress(100);
+    countDownTimer=new CountDownTimer(10000,100) {
+        @Override
+        public void onTick(long millisUntilFinished) {
+
+            iprogress++;
+            progressBar.setProgress((int)(iprogress*(-1))+100);
+
+        }
+
+        @Override
+        public void onFinish()
+        {
+            progressBar.setProgress(0);
+            totalGuesses++;
+            disableButtons();
+                findBtn(true);
+                nextBtn.setVisibility(View.VISIBLE);
+                nextBtn.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        animate(true);
+                        findBtn(false);
+                    }
+                });
+        }
+    };
+    countDownTimer.start();
+
+    }
+
+
+    private void findBtn(Boolean check){
+
+        LinearLayout randomRow = guessesLinearLayouts[rowAnswer];
+       if(check) {
+           ((Button) randomRow.getChildAt(columnAnswer)).setBackground(ContextCompat.getDrawable(getActivity(), R.drawable.correctbuttonstyle));
+       }else {
+           ((Button) randomRow.getChildAt(columnAnswer)).setBackground(ContextCompat.getDrawable(getActivity(), R.drawable.defaultbuttonstyle));
+       }
     }
 
 }

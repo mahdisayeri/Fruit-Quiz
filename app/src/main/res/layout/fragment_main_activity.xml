@@ -32,14 +32,24 @@
         android:contentDescription="@string/image_description"
         android:scaleType="fitCenter" />
 
-    <TextView
-        android:id="@+id/guessCountryTextView"
-        android:layout_width="wrap_content"
+    <ProgressBar
+        android:id="@+id/progressBarTime"
+        style="@android:style/Widget.ProgressBar.Horizontal"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:indeterminate="false"
+        android:maxHeight="30dp"
+        android:minHeight="30dp"
+        android:progress="100"
+        android:scaleY="0.8"
+        android:layout_margin="20dp"
+        android:progressTint="@color/green"
+        android:progressBackgroundTint="@color/green_light"
         android:layout_gravity="center_horizontal"
         android:layout_marginBottom="@dimen/spacing"
         android:gravity="center_horizontal"
-        android:text="@string/guess_country" />
+         />
+
 
     <LinearLayout
         android:id="@+id/row1Linearlayout"
@@ -49,24 +59,26 @@
 
         <Button
             android:id="@+id/button"
-            style="@android:style/Widget.Material.Button.Colored"
+            android:layout_margin="7dp"
+            android:background="@drawable/defaultbuttonstyle"
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="1"
             android:lines="2"
             android:text="Button"
-            android:textColor="@color/button_text_color"
+            android:textColor="@android:color/primary_text_dark"
             tools:targetApi="m" />
 
         <Button
             android:id="@+id/button3"
-            style="@android:style/Widget.Material.Button.Colored"
+            android:layout_margin="7dp"
+            android:background="@drawable/defaultbuttonstyle"
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="1"
             android:lines="2"
             android:text="Button"
-            android:textColor="@color/button_text_color"
+            android:textColor="@android:color/primary_text_dark"
             tools:targetApi="m" />
     </LinearLayout>
 
@@ -78,24 +90,26 @@
 
         <Button
             android:id="@+id/button4"
-            style="@android:style/Widget.Material.Button.Colored"
+            android:layout_margin="7dp"
+            android:background="@drawable/defaultbuttonstyle"
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="1"
             android:lines="2"
             android:text="Button"
-            android:textColor="@color/button_text_color"
+            android:textColor="@android:color/primary_text_dark"
             tools:targetApi="m" />
 
         <Button
             android:id="@+id/button5"
-            style="@android:style/Widget.Material.Button.Colored"
+            android:layout_margin="7dp"
+            android:background="@drawable/defaultbuttonstyle"
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="1"
             android:lines="2"
             android:text="Button"
-            android:textColor="@color/button_text_color"
+            android:textColor="@android:color/primary_text_dark"
             tools:targetApi="m" />
     </LinearLayout>
 
@@ -107,24 +121,26 @@
 
         <Button
             android:id="@+id/button6"
-            style="@android:style/Widget.Material.Button.Colored"
+            android:layout_margin="7dp"
+            android:background="@drawable/defaultbuttonstyle"
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="1"
             android:lines="2"
             android:text="Button"
-            android:textColor="@color/button_text_color"
+            android:textColor="@android:color/primary_text_dark"
             tools:targetApi="m" />
 
         <Button
             android:id="@+id/button7"
-            style="@android:style/Widget.Material.Button.Colored"
+            android:layout_margin="7dp"
+            android:background="@drawable/defaultbuttonstyle"
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="1"
             android:lines="2"
             android:text="Button"
-            android:textColor="@color/button_text_color"
+            android:textColor="@android:color/primary_text_dark"
             tools:targetApi="m" />
     </LinearLayout>
 
@@ -136,33 +152,42 @@
 
         <Button
             android:id="@+id/button8"
-            style="@android:style/Widget.Material.Button.Colored"
+            android:layout_margin="7dp"
+            android:background="@drawable/defaultbuttonstyle"
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="1"
             android:lines="2"
             android:text="Button"
-            android:textColor="@color/button_text_color"
+            android:textColor="@android:color/primary_text_dark"
             tools:targetApi="m" />
 
         <Button
             android:id="@+id/button9"
-            style="@android:style/Widget.Material.Button.Colored"
+            android:layout_margin="7dp"
+            android:background="@drawable/defaultbuttonstyle"
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="1"
             android:lines="2"
             android:text="Button"
-            android:textColor="@color/button_text_color"
+            android:textColor="@android:color/primary_text_dark"
             tools:targetApi="m" />
     </LinearLayout>
 
-    <TextView
-        android:id="@+id/answerTextView"
-        android:layout_width="match_parent"
+    <Button
+
+        android:textStyle="bold"
+        android:layout_marginTop="10dp"
+        android:layout_marginBottom="10dp"
+        android:background="@drawable/nextbuttonstyle"
+        android:textColor="@android:color/primary_text_dark"
+        android:id="@+id/nextBtn"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_gravity="bottom|center_horizontal"
-        android:gravity="center_horizontal"
-        android:textSize="@dimen/answersize"
-        android:textStyle="normal|bold" />
+        android:layout_gravity="center_horizontal"
+        android:text="Next" />
+
+
+
 </LinearLayout>
