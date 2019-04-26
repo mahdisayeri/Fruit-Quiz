@@ -42,7 +42,7 @@ import java.util.Set;
  */
 public class MainActivityFragment extends Fragment {
 
-    public static final int flagsInQuiz=10;
+    public static final int flagsInQuiz=3;
     private List<String> fileNameList;
     private List<String> quizCountriesList;
     private Set<String> regionSet;
@@ -114,7 +114,7 @@ public class MainActivityFragment extends Fragment {
     @Override
     public void onPause() {
         super.onPause();
-        countDownTimer.cancel(); 
+        countDownTimer.cancel();
 
     }
 
@@ -126,8 +126,8 @@ public class MainActivityFragment extends Fragment {
             String guess= guessButton.getText().toString();
             String answer=getCountryName(correctAnswer);
             countDownTimer.cancel();
-            if(totalGuesses<flagsInQuiz){
-                totalGuesses++;
+            totalGuesses++;
+
                 if(guess.equals(answer)){
                     correctsound.start();
                     ++correctAnswers;
@@ -163,21 +163,6 @@ public class MainActivityFragment extends Fragment {
 
 
                 }
-
-            }else {
-                AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
-                builder.setMessage(getString(R.string.results, correctAnswers, (10*correctAnswers)));
-                builder.setPositiveButton(R.string.reset_quiz, new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        resetQuiz();
-                    }
-                });
-                builder.setCancelable(false);
-                builder.create().show();
-            }
-
-
         }
     };
 
@@ -214,7 +199,7 @@ private void disableButtons(){
       }
 
       correctAnswers=0;
-      totalGuesses=1;
+      totalGuesses=0;
       quizCountriesList.clear();
       int flagCounter=1;
       int numberOfFlags=fileNameList.size();
@@ -231,45 +216,65 @@ private void disableButtons(){
     }
 
     private void loadNextFlag(){
-        nextBtn.setVisibility(View.GONE);
-        String nextImage=quizCountriesList.remove(0);
-        correctAnswer=nextImage;
-        questionNumberTextView.setText(getString(R.string.question,(totalGuesses),flagsInQuiz));
-        String region=nextImage.substring(0,nextImage.indexOf('-'));
-        AssetManager assets=getActivity().getAssets();
-        try{
-            InputStream stream=assets.open(region+"/"+nextImage+".png");
-            Drawable flag=Drawable.createFromStream(stream,nextImage);
-            flagImageView.setImageDrawable(flag);
-            animate(false);
-        }
-        catch (IOException exception){
-            Log.e("FlagQuiz","Error loading "+nextImage,exception);
-        }
 
-        Collections.shuffle(fileNameList);
-        int correct=fileNameList.indexOf(correctAnswer);
-        String s=fileNameList.remove(correct);
-        fileNameList.add(s);
-
-        for (int row=0;row<guessRows;row++){
-
-            for(int column=0;column<guessesLinearLayouts[row].getChildCount();column++){
-
-                Button newGuessButton=(Button)guessesLinearLayouts[row].getChildAt(column);
-                newGuessButton.setEnabled(true);
-                String fileName=fileNameList.get((row*2)+column);
-                newGuessButton.setText(getCountryName(fileName));
+        if(totalGuesses<flagsInQuiz){
+            nextBtn.setVisibility(View.GONE);
+            String nextImage=quizCountriesList.remove(0);
+            correctAnswer=nextImage;
+            questionNumberTextView.setText(getString(R.string.question,(totalGuesses)+1,flagsInQuiz));
+            String region=nextImage.substring(0,nextImage.indexOf('-'));
+            AssetManager assets=getActivity().getAssets();
+            try{
+                InputStream stream=assets.open(region+"/"+nextImage+".png");
+                Drawable flag=Drawable.createFromStream(stream,nextImage);
+                flagImageView.setImageDrawable(flag);
+                animate(false);
             }
+            catch (IOException exception){
+                Log.e("FlagQuiz","Error loading "+nextImage,exception);
+            }
+
+            Collections.shuffle(fileNameList);
+            int correct=fileNameList.indexOf(correctAnswer);
+            String s=fileNameList.remove(correct);
+            fileNameList.add(s);
+
+            for (int row=0;row<guessRows;row++){
+
+                for(int column=0;column<guessesLinearLayouts[row].getChildCount();column++){
+
+                    Button newGuessButton=(Button)guessesLinearLayouts[row].getChildAt(column);
+                    newGuessButton.setEnabled(true);
+                    String fileName=fileNameList.get((row*2)+column);
+                    newGuessButton.setText(getCountryName(fileName));
+                }
+            }
+            int row=random.nextInt(guessRows);
+            rowAnswer=row;
+            int column=random.nextInt(2);
+            columnAnswer=column;
+            LinearLayout randomRow=guessesLinearLayouts[row];
+            String countryName=getCountryName(correctAnswer);
+            ((Button)randomRow.getChildAt(column)).setText(countryName);
+            progressTimer();
+
+        }else {
+            quizLinearLayout.setVisibility(View.GONE);
+            countDownTimer.cancel();
+          //  animate(true);
+            AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+            builder.setMessage(getString(R.string.results, correctAnswers, (10*correctAnswers)));
+            builder.setPositiveButton(R.string.reset_quiz, new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    resetQuiz();
+                    quizLinearLayout.setVisibility(View.VISIBLE);
+
+                }
+            });
+            builder.setCancelable(false);
+            builder.create().show();
         }
-        int row=random.nextInt(guessRows);
-        rowAnswer=row;
-        int column=random.nextInt(2);
-        columnAnswer=column;
-        LinearLayout randomRow=guessesLinearLayouts[row];
-        String countryName=getCountryName(correctAnswer);
-        ((Button)randomRow.getChildAt(column)).setText(countryName);
-       progressTimer();
 
 
     }
@@ -283,7 +288,7 @@ private void disableButtons(){
 
     private void animate(boolean animateOut){
 
-        if(totalGuesses==1)
+        if(totalGuesses==0)
             return;
         int centerX=(quizLinearLayout.getLeft()+quizLinearLayout.getRight())/2;
         int centerY=(quizLinearLayout.getTop()+quizLinearLayout.getBottom()/2);
@@ -297,8 +302,8 @@ private void disableButtons(){
                     @Override
                     public void onAnimationEnd(Animator animation) {
                         super.onAnimationEnd(animation);
-                        loadNextFlag();
-                    }
+                            loadNextFlag();
+                        }
                 });
 
             }else {

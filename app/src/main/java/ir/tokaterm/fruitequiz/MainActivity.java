@@ -1,5 +1,6 @@
 package ir.tokaterm.fruitequiz;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.ActivityInfo;
@@ -8,6 +9,7 @@ import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
@@ -109,5 +111,28 @@ public class MainActivity extends AppCompatActivity {
         Intent preferencesIntent=new Intent(this,SettingsActivity.class);
         startActivity(preferencesIntent);
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public void onBackPressed() {
+      //  super.onBackPressed();
+        super.onPause();
+        AlertDialog.Builder ab=new AlertDialog.Builder(this);
+        ab.setMessage(R.string.exit_message);
+        ab.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+
+                MainActivity.this.finish();
+            }
+        });
+        ab.setNegativeButton("No", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+            MainActivity.this.onResume();
+                dialog.cancel();
+            }
+        });
+        ab.create().show();
     }
 }
