@@ -21,7 +21,11 @@
     <string name="image_description">Image of the correct flag in the quiz</string>
     <string name="default_region">Fruits</string>
     <string name="exit_message">Exit From FruitsQuiz?</string>
+
+
     <string name="title_nav_home">Home</string>
-    <string name="title_nave_list">MyWorlds</string>
+    <string name="title_nave_wordList">MyWorlds</string>
     <string name="title_nave_profile">Profile</string>
+    <string name="title_activity_base">BaseActivity</string>
+    <string name="title_activity_main">MainActivity</string>
 </resources>

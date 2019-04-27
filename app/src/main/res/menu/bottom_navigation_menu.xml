@@ -1,11 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
 
-    <item android:icon="@drawable/ic_home_black_24dp" android:id="@+id/bottom_nav_home"
-        android:title="@string/title_nav_home"></item>
-    <item android:icon="@drawable/ic_playlist_add_check_black_24dp" android:id="@+id/bottom_nav_list0"
-        android:title="@string/title_nave_list"></item>
+
     <item android:icon="@drawable/ic_person_black_24dp" android:id="@+id/bottom_nav_profile"
         android:title="@string/title_nave_profile"></item>
+    <item android:icon="@drawable/ic_playlist_add_check_black_24dp" android:id="@+id/bottom_nav_word_list"
+        android:title="@string/title_nave_wordList"></item>
+    <item android:icon="@drawable/ic_home_black_24dp" android:id="@+id/bottom_nav_home"
+        android:title="@string/title_nav_home"></item>
+
+
 
 </menu>
