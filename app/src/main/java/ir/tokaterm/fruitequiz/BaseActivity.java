@@ -4,13 +4,16 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import android.view.MenuItem;
 import android.widget.TextView;
+import android.widget.Toast;
 
 public class BaseActivity extends AppCompatActivity {
 
-    private TextView mTextMessage;
 
     private BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener
             = new BottomNavigationView.OnNavigationItemSelectedListener() {
@@ -19,15 +22,16 @@ public class BaseActivity extends AppCompatActivity {
         public boolean onNavigationItemSelected(@NonNull MenuItem item) {
             switch (item.getItemId()) {
                 case R.id.bottom_nav_home:
-                    Intent main=new Intent(BaseActivity.this,MainActivity.class);
-                    startActivity(main);
+                    StartFragment startFragment=new StartFragment();
+                    switchFragment(startFragment);
                   //  mTextMessage.setText(R.string.title_nav_home);
                     return true;
                 case R.id.bottom_nav_word_list:
-                    mTextMessage.setText(R.string.title_nave_wordList);
+
+
                     return true;
                 case R.id.bottom_nav_profile:
-                    mTextMessage.setText(R.string.title_nave_profile);
+
                     return true;
             }
             return false;
@@ -39,9 +43,22 @@ public class BaseActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_base);
 
-        mTextMessage = (TextView) findViewById(R.id.base_message);
         BottomNavigationView navigation = (BottomNavigationView) findViewById(R.id.base_bottom_navigation);
         navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
+
+        StartFragment startFragment=new StartFragment();
+        switchFragment(startFragment);
+
+
+    }
+
+    private void switchFragment(Fragment frag){
+
+        FragmentManager fm=getSupportFragmentManager();
+        FragmentTransaction ft=fm.beginTransaction();
+        ft.replace(R.id.base_frag_container,frag);
+        ft.commit();
+
     }
 
 }
